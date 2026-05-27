@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeStack Interface</title>
+<style>
+body { margin:0; font-family:monospace; background:#050505; color:#00ff9f; }
+.container { max-width:900px; margin:auto; padding:40px; }
+.block { border-left:2px solid #00ff9f; padding:20px; margin:40px 0; }
+.small { color:#888; font-size:12px; }
+.hidden { display:none; }
+button { background:#000; color:#00ff9f; border:1px solid #00ff9f; padding:10px; cursor:pointer; margin-top:10px; }
+.identity { color:#00ffaa; font-size:13px; }
+.hash { color:#00ff9f; font-size:12px; word-break:break-all; }
+</style>
+</head>
+<body>
+
+<div class="container" id="layer1">
+<h1>SAFE<span style="color:#fff">STACK</span></h1>
+<p class="small">signal detected // origin unknown</p>
+
+<div class="block">
+<h2>// origin</h2>
+<p>
+not a company<br>
+not a service<br>
+not a product<br><br>
+this is a response
+</p>
+</div>
+
+<div class="block">
+<h2>// why</h2>
+<p>
+systems became opaque<br>
+control replaced trust<br>
+centralization replaced freedom<br><br>
+this is correction layer
+</p>
+</div>
+
+<button onclick="enterSystem()">ENTER SYSTEM</button>
+</div>
+
+<div class="container hidden" id="layer2">
+<h1>SafeStack // Interface</h1>
+<p class="small">mode: operational</p>
+
+<div class="block identity">
+NODE: public-interface<br>
+STATUS: AWARE<br>
+INTENT: ethical cybersecurity research & systems
+</div>
+
+<div class="block">
+<h2>// verification</h2>
+<p>fingerprint:</p>
+<p class="hash" id="fingerprint"></p>
+<button onclick="copyFingerprint()">COPY FINGERPRINT</button>
+
+<p>signature:</p>
+<p class="hash" id="signature"></p>
+</div>
+
+<div class="block">
+<h2>// repositories</h2>
+<ul id="repos"></ul>
+</div>
+
+<button onclick="exitSystem()">EXIT</button>
+</div>
+
+<script>
+function enterSystem() {
+  document.getElementById('layer1').classList.add('hidden');
+  document.getElementById('layer2').classList.remove('hidden');
+}
+
+function exitSystem() {
+  document.getElementById('layer2').classList.add('hidden');
+  document.getElementById('layer1').classList.remove('hidden');
+}
+
+function copyFingerprint() {
+  const text = document.getElementById("fingerprint").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Fingerprint copied");
+}
+
+async function sha256(text) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+(async () => {
+  const MESSAGE = "SafeStack::public-interface::AWARE::v1";
+
+  const fingerprint = await sha256(MESSAGE);
+  const signature = await sha256(fingerprint + "::safestack::signature");
+
+  document.getElementById("fingerprint").innerText = fingerprint;
+  document.getElementById("signature").innerText = signature;
+})();
+
+fetch("https://api.github.com/orgs/kibernetinio-saugumo-sprendimai/repos")
+.then(res => res.json())
+.then(data => {
+  const list = document.getElementById("repos");
+  data.slice(0,10).forEach(repo => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
+    list.appendChild(li);
+  });
+});
+</script>
+
+</body>
+</html>
