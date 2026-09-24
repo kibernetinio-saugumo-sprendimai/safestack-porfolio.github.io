@@ -16,6 +16,10 @@
       --text: #e8f1f2;
       --muted: #91a7ad;
       --accent: #73e0bd;
+      --sky: #38bdf8;
+      --amber: #fbbf24;
+      --rose: #f43f5e;
+      --purple: #c084fc;
       --max: 1180px;
     }
     * { box-sizing: border-box; }
@@ -98,10 +102,10 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 80px;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 70px;
       align-items: center;
-      padding: 100px 0 92px;
+      padding: 92px 0 86px;
     }
     h1 {
       max-width: 720px;
@@ -142,21 +146,33 @@
       transform: translateY(-1px);
       filter: brightness(1.05);
     }
+
+    /* Hero Console / HUD Panel */
     .hero-panel {
       border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(16, 35, 45, 0.95), rgba(7, 16, 22, 0.92));
+      background: linear-gradient(145deg, rgba(16, 35, 45, 0.95), rgba(7, 16, 22, 0.94));
       padding: 24px;
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      border-radius: 4px;
+      position: relative;
+    }
+    .hero-panel:before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
     .panel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--line);
-      padding-bottom: 16px;
-      margin-bottom: 20px;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
       color: var(--muted);
       font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
     }
     .live {
       display: flex;
@@ -174,13 +190,74 @@
       height: 7px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(115, 224, 189, 0.1);
+      box-shadow: 0 0 0 5px rgba(115, 224, 189, 0.12);
     }
+
+    /* Radar / Telemetry Oscilloscope */
+    .radar-hud {
+      position: relative;
+      background: rgba(7, 16, 22, 0.75);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .hero-chart {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @keyframes scanBeam {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-380px); }
+      100% { transform: translateX(0); }
+    }
+    .scan-beam {
+      animation: scanBeam 7s ease-in-out infinite;
+    }
+    @keyframes beaconPulse {
+      0% { r: 5px; opacity: 1; }
+      100% { r: 16px; opacity: 0; }
+    }
+    .beacon-pulse {
+      animation: beaconPulse 2s ease-out infinite;
+      transform-origin: center;
+    }
+
+    /* HUD Sub-Grid */
+    .hud-telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: rgba(13, 26, 34, 0.6);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 14px;
+      margin-top: 14px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .hud-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .hud-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hud-val {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .text-accent { color: var(--accent); }
+    .text-sky { color: var(--sky); }
+
     .signal {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 16px;
     }
     .signal div {
       border-left: 2px solid var(--accent);
@@ -188,7 +265,7 @@
     }
     .signal strong {
       display: block;
-      font-size: 21px;
+      font-size: 20px;
     }
     .signal span {
       color: var(--muted);
@@ -216,42 +293,92 @@
       line-height: 1.05;
     }
     .section-copy {
-      max-width: 460px;
+      max-width: 480px;
       color: var(--muted);
       margin: 0;
       font-size: 14px;
     }
 
-    /* Capabilities */
-    .grid-3 {
+    /* Capabilities & Defense Radar */
+    .capabilities-layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .grid-3-stacked {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
     .card {
       border: 1px solid var(--line);
       background: rgba(13, 26, 34, 0.78);
-      padding: 25px;
-      min-height: 210px;
+      padding: 22px 24px;
+      position: relative;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      border-color: rgba(115, 224, 189, 0.4);
+      transform: translateX(2px);
     }
     .card-number {
       color: var(--accent);
       font: 700 12px/1 ui-monospace, SFMono-Regular, monospace;
     }
     .card h3 {
-      margin: 28px 0 10px;
-      font-size: 19px;
+      margin: 12px 0 6px;
+      font-size: 18px;
     }
     .card p {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13.5px;
       margin: 0;
+      line-height: 1.5;
+    }
+    .radar-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(150deg, rgba(16, 35, 45, 0.8), rgba(13, 26, 34, 0.95));
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 4px;
+    }
+    .radar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line-subtle);
+      padding-bottom: 10px;
+    }
+    .radar-chart {
+      width: 100%;
+      height: auto;
+      max-height: 290px;
+      display: block;
+      margin: auto;
+    }
+    .radar-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 10px;
+      border-top: 1px solid var(--line-subtle);
+      padding-top: 10px;
     }
 
-    /* Signals & Metrics */
+    /* Signals & Interactive X/Y Chart */
     .metrics {
       display: grid;
-      grid-template-columns: 0.9fr 1.4fr 0.9fr;
+      grid-template-columns: 0.85fr 1.55fr 0.85fr;
       gap: 16px;
       align-items: stretch;
     }
@@ -259,6 +386,9 @@
       border: 1px solid var(--line);
       background: var(--panel);
       padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .metric-value {
       font-size: 42px;
@@ -272,31 +402,83 @@
       font-size: 12px;
       margin-top: 8px;
     }
-    .chart-card { grid-column: span 1; }
-    .chart-title {
+    .chart-card {
+      grid-column: span 1;
+      justify-content: flex-start;
+      padding: 20px 22px;
+    }
+    .chart-controls {
       display: flex;
       justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
     }
-    .chart-title span {
+    .chart-series-toggles {
+      display: flex;
+      gap: 6px;
+    }
+    .chart-btn {
+      background: rgba(13, 26, 34, 0.7);
+      border: 1px solid var(--line);
       color: var(--muted);
       font-size: 11px;
+      font-family: ui-monospace, monospace;
+      padding: 4px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .chart-btn:hover, .chart-btn.active {
+      background: rgba(115, 224, 189, 0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .chart-tooltip-hud {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(7, 16, 22, 0.85);
+      padding: 4px 10px;
+      border: 1px solid var(--line-subtle);
+      border-radius: 2px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
     }
     .chart { width: 100%; height: auto; display: block; }
     .chart text { fill: #91a7ad; font: 10px ui-monospace, SFMono-Regular, monospace; }
-    .chart .axis { stroke: #44616c; stroke-width: 1; }
-    .chart .gridline { stroke: #203b48; stroke-width: 1; stroke-dasharray: 3 4; }
+    .chart .axis { stroke: #44616c; stroke-width: 1.25; }
+    .chart .gridline { stroke: #1a323e; stroke-width: 1; stroke-dasharray: 3 4; }
     .chart .curve {
       fill: none;
       stroke: var(--accent);
-      stroke-width: 3;
+      stroke-width: 2.5;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-    .chart .point { fill: var(--bg); stroke: var(--accent); stroke-width: 2; }
+    .chart .curve-secondary {
+      fill: none;
+      stroke: var(--sky);
+      stroke-width: 1.75;
+      stroke-dasharray: 4 3;
+    }
+    .chart .curve-zero {
+      stroke: var(--rose);
+      stroke-width: 1.5;
+    }
+    .chart-dot {
+      cursor: pointer;
+      transition: r 0.2s ease, fill 0.2s ease, stroke-width 0.2s ease;
+    }
+    .chart-dot:hover {
+      r: 6.5px;
+      fill: #ffffff;
+      stroke-width: 2.5px;
+    }
 
-    /* Trust Model */
+    /* Trust Model & Pipeline Flow */
     .split {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -305,13 +487,22 @@
     .architecture {
       border: 1px solid var(--line);
       background: var(--panel);
-      padding: 26px;
+      padding: 24px;
     }
     .architecture svg { width: 100%; height: auto; display: block; }
-    .architecture text { fill: #cfe0e2; font: 12px ui-monospace, SFMono-Regular, monospace; }
-    .architecture .box { fill: #10232d; stroke: #40606b; }
+    .architecture text { fill: #cfe0e2; font: 11px ui-monospace, SFMono-Regular, monospace; }
+    .architecture .box { fill: #10232d; stroke: #40606b; transition: stroke 0.2s ease; }
+    .architecture .box:hover { stroke: var(--accent); }
     .architecture .root { fill: #17362f; stroke: var(--accent); }
-    .architecture .edge { stroke: #557780; stroke-width: 1.5; stroke-dasharray: 5 4; }
+    @keyframes flowDash {
+      to { stroke-dashoffset: -20; }
+    }
+    .flow-edge {
+      stroke: #557780;
+      stroke-width: 1.5;
+      stroke-dasharray: 5 4;
+      animation: flowDash 2s linear infinite;
+    }
     .trust {
       border: 1px solid var(--line);
       padding: 26px;
@@ -428,6 +619,14 @@
       align-items: center;
       gap: 8px;
     }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      box-shadow: 0 0 6px var(--accent);
+    }
     .project-badge {
       font-size: 10px;
       font-family: ui-monospace, SFMono-Regular, monospace;
@@ -521,10 +720,9 @@
 
     /* Responsive */
     @media (max-width: 850px) {
-      .hero, .metrics, .split { grid-template-columns: 1fr; gap: 28px; }
+      .hero, .metrics, .split, .capabilities-layout { grid-template-columns: 1fr; gap: 28px; }
       .hero { padding-top: 65px; }
       .chart-card { grid-column: auto; }
-      .grid-3 { grid-template-columns: 1fr; }
       .section-head { display: block; }
       .section-copy { margin-top: 14px; }
       .projects { grid-template-columns: 1fr; }
@@ -541,6 +739,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .scan-beam, .beacon-pulse, .flow-edge { animation: none; }
     }
   </style>
 </head>
@@ -552,8 +751,8 @@
     </a>
     <nav class="nav-links" aria-label="Main navigation">
       <a href="#capabilities">Capabilities</a>
-      <a href="#signals">Signals</a>
-      <a href="#trust">Trust</a>
+      <a href="#signals">Signals &amp; X/Y Telemetry</a>
+      <a href="#trust">Trust Pipeline</a>
       <a href="#projects">Projects (22)</a>
       <a class="highlight" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-repo-map" target="_blank" rel="noreferrer">Repo Map ↗</a>
     </nav>
@@ -565,24 +764,70 @@
         <h1>Make every critical system verifiable.</h1>
         <p class="lede">SafeStack designs disciplined security controls for teams that need evidence, isolation and clear failure states — not reassuring dashboards.</p>
         <div class="actions">
-          <a class="button" href="#projects">Explore Public Projects <span>↓</span></a>
+          <a class="button" href="#signals">View Live Telemetry <span>↓</span></a>
+          <a class="button secondary" href="#projects">Explore Public Projects <span>↓</span></a>
           <a class="button secondary" href="https://github.com/kibernetinio-saugumo-sprendimai" target="_blank" rel="noreferrer">View GitHub <span>↗</span></a>
         </div>
       </div>
       <aside class="hero-panel" aria-label="SafeStack system status">
         <div class="panel-head">
-          <span>SAFE // CONTROL PLANE</span>
+          <span>SAFE // EDGE CONTROL PLANE</span>
           <span class="live">Operational</span>
         </div>
-        <svg viewBox="0 0 460 190" role="img" aria-label="A controlled security signal rising over time">
-          <path d="M18 160H442M18 120H442M18 80H442M18 40H442" stroke="#203b48" stroke-dasharray="3 4"/>
-          <path d="M18 172V18M18 172H442" stroke="#44616c"/>
-          <path d="M20 147C62 145 77 126 111 132S165 92 197 104S242 70 277 80S320 44 352 58S398 31 440 23" fill="none" stroke="#73e0bd" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="440" cy="23" r="5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
-          <text x="18" y="187" fill="#91a7ad" font-size="10">T−12</text>
-          <text x="406" y="187" fill="#91a7ad" font-size="10">NOW</text>
-          <text x="25" y="31" fill="#91a7ad" font-size="10">CONTROL</text>
-        </svg>
+        
+        <div class="radar-hud">
+          <svg viewBox="0 0 460 170" class="hero-chart" role="img" aria-label="Edge node telemetry waveform">
+            <defs>
+              <linearGradient id="heroGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#73e0bd" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#73e0bd" stop-opacity="0.0"/>
+              </linearGradient>
+              <pattern id="heroGridPattern" width="23" height="17" patternUnits="userSpaceOnUse">
+                <path d="M 23 0 L 0 0 0 17" fill="none" stroke="#16303d" stroke-width="0.75"/>
+              </pattern>
+            </defs>
+            <rect width="460" height="170" fill="url(#heroGridPattern)"/>
+            <line x1="20" y1="85" x2="440" y2="85" stroke="#20404f" stroke-width="1" stroke-dasharray="2 3"/>
+            <line x1="230" y1="15" x2="230" y2="155" stroke="#20404f" stroke-width="1" stroke-dasharray="2 3"/>
+            
+            <!-- Real-time Area -->
+            <path d="M 20 125 Q 75 120 120 100 T 220 70 T 320 48 T 440 26 L 440 155 L 20 155 Z" fill="url(#heroGrad)"/>
+            <!-- Signal Curve -->
+            <path d="M 20 125 Q 75 120 120 100 T 220 70 T 320 48 T 440 26" fill="none" stroke="#73e0bd" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Secondary Wave -->
+            <path d="M 20 140 Q 80 135 130 115 T 235 90 T 335 65 T 440 42" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <!-- Scan Beam Line -->
+            <line class="scan-beam" x1="440" y1="15" x2="440" y2="155" stroke="#73e0bd" stroke-width="1.75" opacity="0.85"/>
+            <!-- Target Beacon -->
+            <circle cx="440" cy="26" r="4.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+            <circle cx="440" cy="26" r="10" fill="none" stroke="#73e0bd" stroke-width="1" class="beacon-pulse"/>
+            
+            <text x="25" y="162" fill="#5c7a84" font-size="9" font-family="monospace">EPOCH: T−12</text>
+            <text x="205" y="162" fill="#5c7a84" font-size="9" font-family="monospace">FAIL-CLOSED: 100%</text>
+            <text x="395" y="162" fill="#73e0bd" font-size="9" font-family="monospace">REALTIME</text>
+            <text x="25" y="28" fill="#5c7a84" font-size="9" font-family="monospace">VERIFIED // EDGE TELEMETRY</text>
+          </svg>
+        </div>
+
+        <div class="hud-telemetry-grid">
+          <div class="hud-item">
+            <span class="hud-label">ARM64 Edge Node</span>
+            <span class="hud-val text-accent">Active // Pi 5</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">NVMe SMART Health</span>
+            <span class="hud-val text-accent">100% Healthy</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Zero-Trust Posture</span>
+            <span class="hud-val text-accent">Fail-Closed</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Post-Quantum</span>
+            <span class="hud-val text-sky">FIPS 203 Ready</span>
+          </div>
+        </div>
+
         <div class="signal">
           <div><strong>22</strong><span>public repos</span></div>
           <div><strong>Ed25519</strong><span>key isolation</span></div>
@@ -595,27 +840,80 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <div class="eyebrow">01 / Capabilities</div>
+            <div class="eyebrow">01 / Capabilities &amp; Posture</div>
             <h2>Security that leaves a trail.</h2>
           </div>
           <p class="section-copy">We build systems where an operator can explain what happened, which key was used and how a failure was contained.</p>
         </div>
-        <div class="grid-3">
-          <article class="card">
-            <span class="card-number">01</span>
-            <h3>Audit with boundaries</h3>
-            <p>Descriptor-safe source handling, bounded inputs and explicit terminal states keep automation inside a controlled surface.</p>
-          </article>
-          <article class="card">
-            <span class="card-number">02</span>
-            <h3>Identity by project</h3>
-            <p>Every project gets its own Ed25519 key. One compromised key does not become a compromise of the entire portfolio.</p>
-          </article>
-          <article class="card">
-            <span class="card-number">03</span>
-            <h3>Evidence over claims</h3>
-            <p>Signed registries, fingerprints and deterministic checks make the important parts independently verifiable.</p>
-          </article>
+
+        <div class="capabilities-layout">
+          <div class="grid-3-stacked">
+            <article class="card">
+              <span class="card-number">01</span>
+              <h3>Audit with boundaries</h3>
+              <p>Descriptor-safe source handling, bounded inputs and explicit terminal states keep automation inside a controlled surface.</p>
+            </article>
+            <article class="card">
+              <span class="card-number">02</span>
+              <h3>Identity by project</h3>
+              <p>Every project gets its own Ed25519 key. One compromised key does not become a compromise of the entire portfolio.</p>
+            </article>
+            <article class="card">
+              <span class="card-number">03</span>
+              <h3>Evidence over claims</h3>
+              <p>Signed registries, fingerprints and deterministic checks make the important parts independently verifiable.</p>
+            </article>
+          </div>
+
+          <aside class="radar-card" aria-label="Five-Pillar Security Defense Posture">
+            <div class="radar-head">
+              <span>DEFENSE POSTURE RADAR</span>
+              <span class="text-accent">PENTAGON AXIS</span>
+            </div>
+            
+            <svg viewBox="0 0 320 270" class="radar-chart" role="img" aria-label="Polar radar chart showing five dimensions of security posture">
+              <defs>
+                <linearGradient id="radarPolyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#73e0bd" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.12"/>
+                </linearGradient>
+              </defs>
+              <!-- Concentric Pentagons: 25%, 50%, 75%, 100% -->
+              <polygon points="160.0,111.2 182.6,127.6 174.0,154.2 146.0,154.2 137.4,127.6" fill="none" stroke="#1c3744" stroke-width="1"/>
+              <polygon points="160.0,87.5 205.2,120.3 187.9,173.5 132.1,173.5 114.8,120.3" fill="none" stroke="#224455" stroke-width="1"/>
+              <polygon points="160.0,63.8 227.8,112.9 201.9,192.7 118.1,192.7 92.2,112.9" fill="none" stroke="#2a5266" stroke-width="1" stroke-dasharray="2 3"/>
+              <polygon points="160.0,40.0 250.4,105.6 215.8,211.9 104.2,211.9 69.6,105.6" fill="none" stroke="#37687f" stroke-width="1.25"/>
+
+              <!-- Axis Rays from Center (160, 135) -->
+              <line x1="160" y1="135" x2="160.0" y2="40.0" stroke="#2b4c5a" stroke-width="1"/>
+              <line x1="160" y1="135" x2="250.4" y2="105.6" stroke="#2b4c5a" stroke-width="1"/>
+              <line x1="160" y1="135" x2="215.8" y2="211.9" stroke="#2b4c5a" stroke-width="1"/>
+              <line x1="160" y1="135" x2="104.2" y2="211.9" stroke="#2b4c5a" stroke-width="1"/>
+              <line x1="160" y1="135" x2="69.6" y2="105.6" stroke="#2b4c5a" stroke-width="1"/>
+
+              <!-- Scored Polygon (98%, 96%, 95%, 100%, 100%) -->
+              <polygon points="160.0,41.9 246.7,106.8 213.0,208.0 104.2,211.9 69.6,105.6" fill="url(#radarPolyGrad)" stroke="#73e0bd" stroke-width="2.5" stroke-linejoin="round"/>
+
+              <!-- Vertex Dots -->
+              <circle cx="160.0" cy="41.9" r="4" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle cx="246.7" cy="106.8" r="4" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle cx="213.0" cy="208.0" r="4" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle cx="104.2" cy="211.9" r="4" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle cx="69.6" cy="105.6" r="4" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+
+              <!-- Labels -->
+              <text x="160" y="24" fill="#73e0bd" font-size="10" font-family="monospace" text-anchor="middle" font-weight="700">Edge OS Kernel 98%</text>
+              <text x="258" y="104" fill="#91a7ad" font-size="9" font-family="monospace">Zero-Trust 96%</text>
+              <text x="216" y="235" fill="#91a7ad" font-size="9" font-family="monospace" text-anchor="middle">AST Audit 95%</text>
+              <text x="104" y="235" fill="#91a7ad" font-size="9" font-family="monospace" text-anchor="middle">Public Proofs 100%</text>
+              <text x="60" y="104" fill="#91a7ad" font-size="9" font-family="monospace" text-anchor="end">Keys 100%</text>
+            </svg>
+
+            <div class="radar-footer">
+              <span>OVERALL ATTRIBUTION</span>
+              <span>100% FAIL-CLOSED</span>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -624,44 +922,105 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <div class="eyebrow">02 / Signals</div>
+            <div class="eyebrow">02 / Signals &amp; Telemetry</div>
             <h2>Measured control, visible drift.</h2>
           </div>
-          <p class="section-copy">A security posture is useful when it can be observed over time. The telemetry below reflects verifiable public posture, not an ungrounded marketing score.</p>
+          <p class="section-copy">A security posture is useful when it can be observed over time. The dual-axis telemetry below reflects verifiable public posture, invariant velocity, and zero drift.</p>
         </div>
         <div class="metrics">
           <div class="metric-card">
             <div class="metric-value">22</div>
             <span class="metric-label">verified public repositories</span>
           </div>
+
           <div class="metric-card chart-card">
-            <div class="chart-title">
-              <span>control coverage / illustrative telemetry</span>
-              <span>last 12 intervals</span>
+            <div class="chart-controls">
+              <div class="chart-series-toggles" role="group" aria-label="Telemetry series toggles">
+                <button class="chart-btn active" id="btnAllSeries" type="button">All Series (X/Y)</button>
+                <button class="chart-btn" id="btnCoverageOnly" type="button">Coverage %</button>
+                <button class="chart-btn" id="btnInvariantsOnly" type="button">Proofs Velocity</button>
+              </div>
+              <div class="chart-tooltip-hud" id="chartHud">
+                Epoch: T−0 (NOW) · Coverage: 100% · Drift: 0.00%
+              </div>
             </div>
-            <svg class="chart" viewBox="0 0 600 245" role="img" aria-label="Line chart showing increasing control coverage over twelve intervals">
-              <path class="gridline" d="M58 45H575M58 90H575M58 135H575M58 180H575"/>
-              <path class="axis" d="M58 15V205M58 205H575"/>
-              <text x="21" y="49">100</text>
-              <text x="30" y="94">75</text>
-              <text x="30" y="139">50</text>
-              <text x="30" y="184">25</text>
-              <text x="40" y="209">0</text>
-              <text x="55" y="225">01</text>
-              <text x="148" y="225">03</text>
-              <text x="241" y="225">05</text>
-              <text x="334" y="225">07</text>
-              <text x="427" y="225">09</text>
-              <text x="520" y="225">12</text>
-              <path class="curve" d="M58 180L105 166L151 171L198 142L244 131L291 139L337 104L384 111L430 80L477 84L523 55L575 39"/>
-              <circle class="point" cx="58" cy="180" r="4"/>
-              <circle class="point" cx="151" cy="171" r="4"/>
-              <circle class="point" cx="244" cy="131" r="4"/>
-              <circle class="point" cx="337" cy="104" r="4"/>
-              <circle class="point" cx="430" cy="80" r="4"/>
-              <circle class="point" cx="575" cy="39" r="4"/>
+
+            <!-- High-Precision Dual X/Y Coordinate Graph -->
+            <svg class="chart" viewBox="0 0 720 280" role="img" aria-label="Dual-axis line chart showing increasing control coverage, invariant proofs velocity, and zero anomaly drift over twelve intervals">
+              <defs>
+                <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#73e0bd" stop-opacity="0.28"/>
+                  <stop offset="100%" stop-color="#73e0bd" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Horizontal Gridlines (Y-axis intervals) -->
+              <line class="gridline" x1="65" y1="35" x2="655" y2="35"/>
+              <line class="gridline" x1="65" y1="87.5" x2="655" y2="87.5"/>
+              <line class="gridline" x1="65" y1="140" x2="655" y2="140"/>
+              <line class="gridline" x1="65" y1="192.5" x2="655" y2="192.5"/>
+              <line class="gridline" x1="65" y1="245" x2="655" y2="245"/>
+
+              <!-- Vertical Gridlines (X-axis intervals) -->
+              <line class="gridline" x1="65" y1="35" x2="65" y2="245"/>
+              <line class="gridline" x1="172.3" y1="35" x2="172.3" y2="245"/>
+              <line class="gridline" x1="279.5" y1="35" x2="279.5" y2="245"/>
+              <line class="gridline" x1="386.8" y1="35" x2="386.8" y2="245"/>
+              <line class="gridline" x1="494.1" y1="35" x2="494.1" y2="245"/>
+              <line class="gridline" x1="601.4" y1="35" x2="601.4" y2="245"/>
+              <line class="gridline" x1="655" y1="35" x2="655" y2="245"/>
+
+              <!-- Main Axes -->
+              <line class="axis" x1="65" y1="25" x2="65" y2="245"/>
+              <line class="axis" x1="65" y1="245" x2="665" y2="245"/>
+              <line class="axis" x1="655" y1="25" x2="655" y2="245"/>
+
+              <!-- Left Y-Axis Labels (Coverage %) -->
+              <text x="55" y="39" text-anchor="end">100%</text>
+              <text x="55" y="91" text-anchor="end">75%</text>
+              <text x="55" y="144" text-anchor="end">50%</text>
+              <text x="55" y="196" text-anchor="end">25%</text>
+              <text x="55" y="248" text-anchor="end">0%</text>
+              <text x="25" y="18" fill="#73e0bd" font-weight="700">POSTURE %</text>
+
+              <!-- Right Y-Axis Labels (Anomaly Drift %) -->
+              <text x="665" y="39" text-anchor="start" fill="#f43f5e">0.20%</text>
+              <text x="665" y="91" text-anchor="start" fill="#f43f5e">0.15%</text>
+              <text x="665" y="144" text-anchor="start" fill="#f43f5e">0.10%</text>
+              <text x="665" y="196" text-anchor="start" fill="#f43f5e">0.05%</text>
+              <text x="665" y="248" text-anchor="start" fill="#73e0bd">0.00%</text>
+              <text x="655" y="18" fill="#f43f5e" font-weight="700">DRIFT %</text>
+
+              <!-- X-Axis Labels (Time Epochs) -->
+              <text x="65.0" y="265" text-anchor="middle">T−12</text>
+              <text x="172.3" y="265" text-anchor="middle">T−10</text>
+              <text x="279.5" y="265" text-anchor="middle">T−08</text>
+              <text x="386.8" y="265" text-anchor="middle">T−06</text>
+              <text x="494.1" y="265" text-anchor="middle">T−04</text>
+              <text x="601.4" y="265" text-anchor="middle">T−02</text>
+              <text x="655.0" y="265" text-anchor="middle" fill="#73e0bd" font-weight="700">NOW</text>
+
+              <!-- Series 1: Verified Control Coverage Area & Curve -->
+              <path id="seriesArea" d="M 65.0,207.2 L 118.6,186.2 L 172.3,173.6 L 225.9,144.2 L 279.5,127.4 L 333.2,112.7 L 386.8,93.8 L 440.5,81.2 L 494.1,66.5 L 547.7,53.9 L 601.4,41.3 L 655.0,35.0 L 655,245 L 65,245 Z" fill="url(#areaGrad)"/>
+              <path id="seriesCoverage" class="curve" d="M 65.0,207.2 L 118.6,186.2 L 172.3,173.6 L 225.9,144.2 L 279.5,127.4 L 333.2,112.7 L 386.8,93.8 L 440.5,81.2 L 494.1,66.5 L 547.7,53.9 L 601.4,41.3 L 655.0,35.0"/>
+
+              <!-- Series 2: Automated Invariant Proofs (Electric Sky) -->
+              <path id="seriesInvariants" class="curve-secondary" d="M 65.0,219.8 L 118.6,198.8 L 172.3,182.0 L 225.9,150.5 L 279.5,131.6 L 333.2,106.4 L 386.8,87.5 L 440.5,72.8 L 494.1,60.2 L 547.7,51.8 L 601.4,39.2 L 655.0,35.0"/>
+
+              <!-- Series 3: Cryptographic Anomaly Drift Rate (Baseline 0%) -->
+              <line id="seriesDrift" class="curve-zero" x1="65" y1="245" x2="655" y2="245"/>
+
+              <!-- Interactive Data Node Dots on Coverage Line -->
+              <circle class="chart-dot" data-epoch="T−12" data-cov="18" data-proofs="120" cx="65.0" cy="207.2" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="T−10" data-cov="34" data-proofs="310" cx="172.3" cy="173.6" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="T−08" data-cov="56" data-proofs="650" cx="279.5" cy="127.4" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="T−06" data-cov="72" data-proofs="990" cx="386.8" cy="93.8" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="T−04" data-cov="85" data-proofs="1300" cx="494.1" cy="66.5" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="T−02" data-cov="97" data-proofs="1580" cx="601.4" cy="41.3" r="3.5" fill="#071016" stroke="#73e0bd" stroke-width="2"/>
+              <circle class="chart-dot" data-epoch="NOW (T−0)" data-cov="100" data-proofs="1640" cx="655.0" cy="35.0" r="5" fill="#73e0bd" stroke="#071016" stroke-width="2"/>
             </svg>
           </div>
+
           <div class="metric-card">
             <div class="metric-value">0</div>
             <span class="metric-label">private repositories exposed</span>
@@ -674,29 +1033,43 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <div class="eyebrow">03 / Trust model</div>
+            <div class="eyebrow">03 / Trust Model &amp; Topology</div>
             <h2>One root. Many isolated identities.</h2>
           </div>
-          <p class="section-copy">The root key signs the public registry. Project keys sign only their own artifacts. Revocation contains the blast radius.</p>
+          <p class="section-copy">The offline root key signs the public registry. Project keys sign only their own artifacts. Animated flow lines illustrate fail-closed cryptographic routing.</p>
         </div>
         <div class="split">
           <div class="architecture">
-            <svg viewBox="0 0 620 245" role="img" aria-label="Root key connected to project keys and signed artifacts">
-              <path class="edge" d="M310 67V104M160 161L278 128M460 161L342 128M160 195V221M310 195V221M460 195V221"/>
-              <rect class="box root" x="220" y="20" width="180" height="48"/>
-              <text x="259" y="49">OFFLINE ROOT KEY</text>
-              <rect class="box" x="70" y="104" width="180" height="58"/>
-              <text x="111" y="129">PROJECT-019</text>
-              <text x="93" y="148">portfolio identity</text>
-              <rect class="box" x="220" y="104" width="180" height="58"/>
-              <text x="261" y="129">PUBLIC REGISTRY</text>
-              <text x="254" y="148">signed manifest</text>
-              <rect class="box" x="370" y="104" width="180" height="58"/>
-              <text x="412" y="129">PROJECT-001</text>
-              <text x="391" y="148">audit identity</text>
-              <text x="91" y="239">isolated</text>
-              <text x="277" y="239">verified</text>
-              <text x="425" y="239">isolated</text>
+            <svg viewBox="0 0 620 260" role="img" aria-label="Animated cryptographic pipeline connecting offline root to project keys, edge runtimes, and external verifiers">
+              <!-- Animated Data Pulse Flow Lines -->
+              <path class="flow-edge" d="M310 65V105"/>
+              <path class="flow-edge" d="M160 162L278 128"/>
+              <path class="flow-edge" d="M460 162L342 128"/>
+              <path class="flow-edge" d="M160 196V225"/>
+              <path class="flow-edge" d="M310 196V225"/>
+              <path class="flow-edge" d="M460 196V225"/>
+
+              <!-- Root Anchor Box -->
+              <rect class="box root" x="210" y="16" width="200" height="50" rx="2"/>
+              <text x="242" y="45" fill="#73e0bd" font-weight="700">OFFLINE ROOT KEY</text>
+
+              <!-- Project Keys & Registry -->
+              <rect class="box" x="60" y="105" width="190" height="58" rx="2"/>
+              <text x="105" y="130" font-weight="700">PROJECT-019</text>
+              <text x="88" y="148" fill="#91a7ad">portfolio identity</text>
+
+              <rect class="box" x="210" y="105" width="200" height="58" rx="2"/>
+              <text x="245" y="130" font-weight="700">PUBLIC REGISTRY</text>
+              <text x="243" y="148" fill="#91a7ad">signed key manifest</text>
+
+              <rect class="box" x="370" y="105" width="190" height="58" rx="2"/>
+              <text x="412" y="130" font-weight="700">PROJECT-005</text>
+              <text x="395" y="148" fill="#91a7ad">node-os edge layer</text>
+
+              <!-- Leaf Nodes -->
+              <text x="88" y="244" fill="#73e0bd">ISOLATED // VERIFIED</text>
+              <text x="268" y="244" fill="#73e0bd">FAIL-CLOSED GATE</text>
+              <text x="430" y="244" fill="#73e0bd">ISOLATED // ATTRIBUTED</text>
             </svg>
           </div>
           <div class="trust">
@@ -706,6 +1079,7 @@
             <code>project-019<br>9a80b6217b91a757254bb9b7e10559758c1e7f13b74b477c941efea9502f6ea2</code>
             <div class="actions">
               <a class="button secondary" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-project-public-keys" target="_blank" rel="noreferrer">Open key registry ↗</a>
+              <a class="button secondary" href="https://github.com/kibernetinio-saugumo-sprendimai/Verification-artifacts" target="_blank" rel="noreferrer">Verification Artifacts ↗</a>
             </div>
           </div>
         </div>
@@ -751,7 +1125,7 @@
         <div class="projects" id="projectsContainer">
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-canon" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">SafeStack Canon</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Canon</span>
               <span class="project-badge trust">Trust Anchor</span>
             </div>
             <p class="project-desc">Immutable root baseline, operational security axioms, and foundational trust principles.</p>
@@ -762,7 +1136,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-technical-canon" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">Technical Canon</span>
+              <span class="project-title"><span class="status-dot"></span> Technical Canon</span>
               <span class="project-badge trust">Governance</span>
             </div>
             <p class="project-desc">Cryptographic governance rules, manifest schemas, and formal integrity verification protocols.</p>
@@ -773,7 +1147,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-project-public-keys" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">Project Public Keys</span>
+              <span class="project-title"><span class="status-dot"></span> Project Public Keys</span>
               <span class="project-badge trust">Key Registry</span>
             </div>
             <p class="project-desc">Signed registry of per-project Ed25519 public keys, key rotation tooling, and canonical serialization.</p>
@@ -784,7 +1158,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-validation-registry" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">Validation Registry</span>
+              <span class="project-title"><span class="status-dot"></span> Validation Registry</span>
               <span class="project-badge trust">Attestation</span>
             </div>
             <p class="project-desc">Official authoritative ledger of cryptographic audit records, project attestations, and verification manifests.</p>
@@ -795,7 +1169,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/Verification-artifacts" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">Verification Artifacts</span>
+              <span class="project-title"><span class="status-dot"></span> Verification Artifacts</span>
               <span class="project-badge trust">Checksums</span>
             </div>
             <p class="project-desc">Detached cryptographic sha256 checksums, signature manifests, and automated verification scripts.</p>
@@ -806,7 +1180,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-control-architecture" target="_blank" rel="noreferrer" data-category="trust">
             <div class="project-head">
-              <span class="project-title">Control Architecture</span>
+              <span class="project-title"><span class="status-dot"></span> Control Architecture</span>
               <span class="project-badge trust">Architecture</span>
             </div>
             <p class="project-desc">Visual trust boundaries, layered cryptographic routing, fail-closed isolation, and control planes.</p>
@@ -817,7 +1191,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/node-os" target="_blank" rel="noreferrer" data-category="runtime">
             <div class="project-head">
-              <span class="project-title">NodeOS</span>
+              <span class="project-title"><span class="status-dot"></span> NodeOS</span>
               <span class="project-badge runtime">Edge OS</span>
             </div>
             <p class="project-desc">Autonomous zero-trust operating layer for edge nodes, featuring NVMe SMART health and verifiable telemetry.</p>
@@ -828,7 +1202,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/Safestack-Zero-Trust" target="_blank" rel="noreferrer" data-category="runtime">
             <div class="project-head">
-              <span class="project-title">SafeStack Zero-Trust</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Zero-Trust</span>
               <span class="project-badge runtime">Engine</span>
             </div>
             <p class="project-desc">Local-first policy decision engine, default-deny network enforcement, and cryptographic posture evaluation.</p>
@@ -839,7 +1213,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/SafeStack-Zero-Trust-Platform" target="_blank" rel="noreferrer" data-category="runtime">
             <div class="project-head">
-              <span class="project-title">Zero-Trust Platform</span>
+              <span class="project-title"><span class="status-dot"></span> Zero-Trust Platform</span>
               <span class="project-badge runtime">Platform</span>
             </div>
             <p class="project-desc">Unified policy orchestration, distributed identity verification, and runtime security enforcement.</p>
@@ -850,7 +1224,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/Safestack-Sentinel" target="_blank" rel="noreferrer" data-category="runtime">
             <div class="project-head">
-              <span class="project-title">SafeStack Sentinel</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Sentinel</span>
               <span class="project-badge runtime">Daemon</span>
             </div>
             <p class="project-desc">Continuous telemetry monitoring daemon, host anomaly detection, and tamper-resistant event logging.</p>
@@ -861,7 +1235,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/Safestack-suite" target="_blank" rel="noreferrer" data-category="runtime">
             <div class="project-head">
-              <span class="project-title">SafeStack Suite</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Suite</span>
               <span class="project-badge runtime">Utilities</span>
             </div>
             <p class="project-desc">Integrated command-line utility suite for edge node administration, diagnostics, and crypto operations.</p>
@@ -872,7 +1246,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-audit_system" target="_blank" rel="noreferrer" data-category="intelligence">
             <div class="project-head">
-              <span class="project-title">SafeStack Audit System</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Audit System</span>
               <span class="project-badge intelligence">Audit</span>
             </div>
             <p class="project-desc">Deterministic AI-assisted security audit pipeline with isolated AST analysis and signed reports.</p>
@@ -883,7 +1257,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-OSINT" target="_blank" rel="noreferrer" data-category="intelligence">
             <div class="project-head">
-              <span class="project-title">SafeStack OSINT</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack OSINT</span>
               <span class="project-badge intelligence">Intelligence</span>
             </div>
             <p class="project-desc">Modular open-source intelligence framework with strict data provenance and signature verification.</p>
@@ -894,7 +1268,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/AI-Tyreju-Komanda" target="_blank" rel="noreferrer" data-category="intelligence">
             <div class="project-head">
-              <span class="project-title">AI Tyrėjų Komanda</span>
+              <span class="project-title"><span class="status-dot"></span> AI Tyrėjų Komanda</span>
               <span class="project-badge intelligence">Agents</span>
             </div>
             <p class="project-desc">Collaborative multi-agent research workspace for automated threat modeling and deep security analysis.</p>
@@ -905,7 +1279,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/freedom.manifesto.github.io" target="_blank" rel="noreferrer" data-category="web">
             <div class="project-head">
-              <span class="project-title">Freedom Manifesto</span>
+              <span class="project-title"><span class="status-dot"></span> Freedom Manifesto</span>
               <span class="project-badge web">Manifesto</span>
             </div>
             <p class="project-desc">Public declaration on digital sovereignty, architectural privacy, and transparent cyber defense.</p>
@@ -916,7 +1290,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-porfolio.github.io" target="_blank" rel="noreferrer" data-category="web">
             <div class="project-head">
-              <span class="project-title">SafeStack Portfolio</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Portfolio</span>
               <span class="project-badge web">Showcase</span>
             </div>
             <p class="project-desc">Official verifiable systems portfolio, public showcase, and live control plane telemetry.</p>
@@ -927,7 +1301,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-book" target="_blank" rel="noreferrer" data-category="web">
             <div class="project-head">
-              <span class="project-title">SafeStack Book</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Book</span>
               <span class="project-badge web">Publishing</span>
             </div>
             <p class="project-desc">Architectural handbooks, security engineering treatises, and implementation field guides.</p>
@@ -938,7 +1312,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/.github" target="_blank" rel="noreferrer" data-category="web">
             <div class="project-head">
-              <span class="project-title">Organisation Profile</span>
+              <span class="project-title"><span class="status-dot"></span> Organisation Profile</span>
               <span class="project-badge web">Community</span>
             </div>
             <p class="project-desc">Global organisation metadata, community guidelines, security policies, and standard issue workflows.</p>
@@ -949,7 +1323,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-repo-map" target="_blank" rel="noreferrer" data-category="ecosystem">
             <div class="project-head">
-              <span class="project-title">Repository Map</span>
+              <span class="project-title"><span class="status-dot"></span> Repository Map</span>
               <span class="project-badge ecosystem">Architecture</span>
             </div>
             <p class="project-desc">Interactive architecture tree, dependency matrix, and repository index for the entire organisation.</p>
@@ -960,7 +1334,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-partners" target="_blank" rel="noreferrer" data-category="ecosystem">
             <div class="project-head">
-              <span class="project-title">Ecosystem Partners</span>
+              <span class="project-title"><span class="status-dot"></span> Ecosystem Partners</span>
               <span class="project-badge ecosystem">Partners</span>
             </div>
             <p class="project-desc">Integration specifications, cooperative security agreements, and partner interoperability guides.</p>
@@ -971,7 +1345,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-media-library" target="_blank" rel="noreferrer" data-category="ecosystem">
             <div class="project-head">
-              <span class="project-title">Media Library</span>
+              <span class="project-title"><span class="status-dot"></span> Media Library</span>
               <span class="project-badge ecosystem">Assets</span>
             </div>
             <p class="project-desc">Curated visual schematics, architectural diagrams, vector brand assets, and technical infographics.</p>
@@ -982,7 +1356,7 @@
           </a>
           <a class="project" href="https://github.com/kibernetinio-saugumo-sprendimai/safestack-music" target="_blank" rel="noreferrer" data-category="ecosystem">
             <div class="project-head">
-              <span class="project-title">SafeStack Soundtracks</span>
+              <span class="project-title"><span class="status-dot"></span> SafeStack Soundtracks</span>
               <span class="project-badge ecosystem">Audio</span>
             </div>
             <p class="project-desc">Official audio streams, thematic cybersecurity focus tracks, and audio link catalogues.</p>
@@ -1007,6 +1381,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. Project filtering & search
       const tabs = document.querySelectorAll('.filter-tab');
       const cards = document.querySelectorAll('.project');
       const searchInput = document.getElementById('projectSearch');
@@ -1051,6 +1426,60 @@
 
       if (searchInput) {
         searchInput.addEventListener('input', applyFilters);
+      }
+
+      // 2. Interactive X/Y Telemetry Chart HUD
+      const chartHud = document.getElementById('chartHud');
+      const dots = document.querySelectorAll('.chart-dot');
+      dots.forEach(dot => {
+        dot.addEventListener('mouseenter', () => {
+          const epoch = dot.getAttribute('data-epoch');
+          const cov = dot.getAttribute('data-cov');
+          const proofs = dot.getAttribute('data-proofs');
+          if (chartHud) {
+            chartHud.textContent = `Epoch: ${epoch} · Coverage: ${cov}% · Invariants: ${proofs} · Drift: 0.00%`;
+          }
+        });
+      });
+
+      // 3. Chart Series Toggles
+      const btnAll = document.getElementById('btnAllSeries');
+      const btnCov = document.getElementById('btnCoverageOnly');
+      const btnInv = document.getElementById('btnInvariantsOnly');
+      const seriesArea = document.getElementById('seriesArea');
+      const seriesCov = document.getElementById('seriesCoverage');
+      const seriesInv = document.getElementById('seriesInvariants');
+
+      function resetToggles() {
+        [btnAll, btnCov, btnInv].forEach(b => b.classList.remove('active'));
+      }
+
+      if (btnAll) {
+        btnAll.addEventListener('click', () => {
+          resetToggles();
+          btnAll.classList.add('active');
+          seriesArea.style.display = 'block';
+          seriesCov.style.display = 'block';
+          seriesInv.style.display = 'block';
+        });
+      }
+      if (btnCov) {
+        btnCov.addEventListener('click', () => {
+          resetToggles();
+          btnCov.classList.add('active');
+          seriesArea.style.display = 'block';
+          seriesCov.style.display = 'block';
+          seriesInv.style.display = 'none';
+        });
+      }
+      if (btnInv) {
+        btnInv.addEventListener('click', () => {
+          resetToggles();
+          btnInv.classList.add('active');
+          seriesArea.style.display = 'none';
+          seriesCov.style.display = 'none';
+          seriesInv.style.display = 'block';
+        });
       }
     });
   </script>
