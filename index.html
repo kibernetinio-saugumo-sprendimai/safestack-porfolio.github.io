@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-agu+Y5JicsZhbUx6Mf11Z4y8PYd0y0cIX+BEG6pabRc='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="SafeStack builds verifiable security systems, zero-trust edge infrastructure, and cryptographic canons for environments that cannot afford silent failure.">
@@ -755,13 +756,14 @@
     </nav>
   </header>
   <main>
+    <p role="note" class="wrap">Demonstration portfolio: charts and status values are illustrative sample data, not live measurements or security certification.</p>
     <section class="wrap hero">
       <div>
         <div class="eyebrow">Independent security infrastructure</div>
         <h1>Make every critical system verifiable.</h1>
         <p class="lede">SafeStack designs disciplined security controls for teams that need evidence, isolation and clear failure states — not reassuring dashboards.</p>
         <div class="actions">
-          <a class="button" href="#signals">View Live Telemetry <span>↓</span></a>
+          <a class="button" href="#signals">View Demonstration Charts <span>↓</span></a>
           <a class="button secondary" href="#projects">Explore Public Projects <span>↓</span></a>
           <a class="button secondary" href="https://github.com/kibernetinio-saugumo-sprendimai" target="_blank" rel="noreferrer">View GitHub <span>↗</span></a>
         </div>
@@ -800,9 +802,9 @@
             <circle cx="440" cy="26" r="10" fill="none" stroke="#73e0bd" stroke-width="1" class="beacon-pulse"/>
             
             <text x="25" y="162" fill="#5c7a84" font-size="9" font-family="monospace">EPOCH: T−12</text>
-            <text x="205" y="162" fill="#5c7a84" font-size="9" font-family="monospace">FAIL-CLOSED: 100%</text>
+            <text x="205" y="162" fill="#5c7a84" font-size="9" font-family="monospace">DEMO: FAIL-CLOSED 100%</text>
             <text x="395" y="162" fill="#73e0bd" font-size="9" font-family="monospace">REALTIME</text>
-            <text x="25" y="28" fill="#5c7a84" font-size="9" font-family="monospace">VERIFIED // EDGE TELEMETRY</text>
+            <text x="25" y="28" fill="#5c7a84" font-size="9" font-family="monospace">DEMO // SAMPLE DATA</text>
           </svg>
         </div>
 
@@ -813,7 +815,7 @@
           </div>
           <div class="hud-item">
             <span class="hud-label">NVMe SMART Health</span>
-            <span class="hud-val text-accent">100% Healthy</span>
+            <span class="hud-val text-accent">Demo: 100% Healthy</span>
           </div>
           <div class="hud-item">
             <span class="hud-label">Zero-Trust Posture</span>
@@ -908,7 +910,7 @@
 
             <div class="radar-footer">
               <span>OVERALL ATTRIBUTION</span>
-              <span>100% FAIL-CLOSED</span>
+              <span>DEMO: 100% FAIL-CLOSED</span>
             </div>
           </aside>
         </div>
@@ -920,9 +922,9 @@
         <div class="section-head">
           <div>
             <div class="eyebrow">02 / Signals &amp; Telemetry</div>
-            <h2>Measured control, visible drift.</h2>
+            <h2>Illustrative control and drift.</h2>
           </div>
-          <p class="section-copy">A security posture is useful when it can be observed over time. The dual-axis telemetry below reflects verifiable public posture, invariant velocity, and zero drift.</p>
+          <p class="section-copy">A security posture is useful when it can be observed over time. The charts below use hard-coded sample data. They are not live telemetry, measured coverage, cryptographic proofs, or evidence of deployment security.</p>
         </div>
         <div class="metrics">
           <div class="metric-card">
@@ -938,7 +940,7 @@
                 <button class="chart-btn" id="btnInvariantsOnly" type="button">Proofs Velocity</button>
               </div>
               <div class="chart-tooltip-hud" id="chartHud">
-                Epoch: T−0 (NOW) · Coverage: 100% · Drift: 0.00%
+                DEMO DATA · Sample coverage: 100% · Sample drift: 0.00%
               </div>
             </div>
 
@@ -1158,7 +1160,7 @@
               <span class="project-title"><span class="status-dot"></span> Validation Registry</span>
               <span class="project-badge trust">Attestation</span>
             </div>
-            <p class="project-desc">Official authoritative ledger of cryptographic audit records, project attestations, and verification manifests.</p>
+            <p class="project-desc">Repository of audit records and verification manifests; authority depends on independently verified signatures.</p>
             <div class="project-foot">
               <span class="project-tag">project-013 · Declarations</span>
               <span class="project-arrow">↗</span>
@@ -1246,7 +1248,7 @@
               <span class="project-title"><span class="status-dot"></span> SafeStack Audit System</span>
               <span class="project-badge intelligence">Audit</span>
             </div>
-            <p class="project-desc">Deterministic AI-assisted security audit pipeline with isolated AST analysis and signed reports.</p>
+            <p class="project-desc">Local model-assisted audit workflow with human-reviewed proposals and unsigned report integrity digests.</p>
             <div class="project-foot">
               <span class="project-tag">project-001 · Python / Framework</span>
               <span class="project-arrow">↗</span>
@@ -1290,7 +1292,7 @@
               <span class="project-title"><span class="status-dot"></span> SafeStack Portfolio</span>
               <span class="project-badge web">Showcase</span>
             </div>
-            <p class="project-desc">Official verifiable systems portfolio, public showcase, and live control plane telemetry.</p>
+            <p class="project-desc">Public project showcase with illustrative charts; no live control-plane connection.</p>
             <div class="project-foot">
               <span class="project-tag">project-019 · safestack.engineering</span>
               <span class="project-arrow">↗</span>
@@ -1434,7 +1436,7 @@
           const cov = dot.getAttribute('data-cov');
           const proofs = dot.getAttribute('data-proofs');
           if (chartHud) {
-            chartHud.textContent = `Epoch: ${epoch} · Coverage: ${cov}% · Invariants: ${proofs} · Drift: 0.00%`;
+            chartHud.textContent = `DEMO DATA · Sample epoch: ${epoch} · Sample coverage: ${cov}% · Sample count: ${proofs} · Sample drift: 0.00%`;
           }
         });
       });
